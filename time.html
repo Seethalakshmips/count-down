@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<head>
+  <title>Angular Countdown Timer</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <script>
+    
+    var app = angular.module('countdownTimerApp', []);
+
+    app.controller('CountdownTimerController', function ($scope, $interval) {
+      $scope.targetTime = 0;
+      $scope.remainingTime = 0;
+      var intervalPromise;
+
+      $scope.setTimer = function () {
+        if ($scope.targetTime > 0) {
+          $scope.remainingTime = $scope.targetTime;
+          if (intervalPromise) {
+            $interval.cancel(intervalPromise);
+          }
+          intervalPromise = $interval(updateTime, 1000, $scope.targetTime);
+        }
+      };
+
+      function updateTime() {
+        if ($scope.remainingTime > 0) {
+          $scope.remainingTime--;
+        } else {
+          $interval.cancel(intervalPromise);
+        }
+      }
+    });
+  </script>
+</head>
+<link rel="stylesheet" href="angular.css">
+<body ng-app="countdownTimerApp">
+  <div ng-controller="CountdownTimerController">
+    <h1 class="headoo">Countdown Timer</h1>
+    <form ng-submit="setTimer()">
+      <h2><label for="targetTime" class="btwo">Set Time (in seconds):</label>
+      <input type="ṭext" id="targetTime" ng-model="targetTime" /></h2>
+    
+      <button class="btwoo" type="submit">Set Timer</button>
+    </form>
+    <h2 ng-if="remainingTime > 0"  class="headooo">Remaining Time: {{ remainingTime}}</h2>
+    <h2  ng-if="remainingTime <= 0" class="heado">Time's up!</h2>
+  </div>
+</body>
+</html>
